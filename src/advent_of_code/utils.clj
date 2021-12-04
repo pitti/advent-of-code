@@ -1,6 +1,7 @@
 (ns advent-of-code.utils
   (:gen-class)
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.string :as str]
+            [clojure.java.io :as io]))
 
 (defn as-num-vector
   "Reads from the file and returns a vector of numbers"
@@ -14,3 +15,16 @@
   [fn file]
   (reduce + 0
           (map fn (as-num-vector file))))
+
+(defn inc-val
+  "increment the map m at position key by x"
+  [m key x]
+  (assoc m key
+         (+ x (get m key 0))))
+
+(defn input->lines
+  [fname]
+  (->> fname
+       io/resource
+       slurp
+       str/split-lines))

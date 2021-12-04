@@ -1,20 +1,14 @@
 (ns advent-of-code.2021.day1
 
-  (:require [clojure.string :as str]
-            [clojure.java.io :as io]))
-
-
+  (:require [advent-of-code.utils :as utils]))
 
 (defn num-increases [ns]
-(->> ns
-     (filter #(< (first %) (second %)))
-     count))
+  (->> ns
+       (filter #(< (first %) (second %)))
+       count))
 
 (def input
-  (->> "day1.txt"
-       io/resource
-       slurp
-       str/split-lines
+  (->> (utils/input->lines "day1.txt")
        (map read-string)
        (into [])))
 
@@ -33,8 +27,7 @@
 (defn day1-star1 [input]
   (->> input
        (partition 2 1)
-       num-increases
-       ))
+       num-increases))
 
 (defn day1-star2 [input]
   (->> input
