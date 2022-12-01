@@ -28,3 +28,14 @@
        io/resource
        slurp
        str/split-lines))
+
+(defn input->str
+  [fname]
+  (->> fname
+       io/resource
+       slurp))
+
+(defn digits->list
+  "convert a string \"ABCD... to a list with single-digit numbers (A B C D ...)"
+  [str]
+  (map #(Integer. %) (str/split str #"")))
