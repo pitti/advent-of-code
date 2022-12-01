@@ -18,6 +18,9 @@
 
 10000")
 
+; print out [kcal num]
+(first (day1 testinput))
+
 (defn str-array-to-int [arr]
   (->>
    (map read-string arr)
@@ -31,7 +34,11 @@
        (map-indexed (fn [idx v] [v (inc idx)]))
        (sort-by first >)))
 
-; print out [kcal num]
-(first (day1 testinput))
+; first star
+(first (day1 (utils/input->str "2022/day1.txt")))
 
-(first (day1 (utils/input->str "day1.txt")))
+; 2nd star
+(->> (day1 (utils/input->str "2022/day1.txt"))
+     (take 3)
+     (map first)
+     (reduce +))
