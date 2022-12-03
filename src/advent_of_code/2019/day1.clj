@@ -1,18 +1,33 @@
-(ns advent-of-code-2019.day1
+(ns advent-of-code.2019.day1
   (:gen-class)
-  (:require [clojure.java.io :as io]))
+  (:require [clojure.java.io :as io]
+            [advent-of-code.utils :as utils]
+            [clojure.string :as str]))
 
-(defn calc-fuel [weight]
+(defn fuel [n]
   (max 0
-       (- (quot weight 3) 2)))
+       (- (int (Math/floor (/ n 3))) 2)))
 
-(defn calc-fuel-star2
+(defn solve [fn input]
+  (transduce
+   (comp
+    (map read-string)
+    (map fn))
+   +
+   (str/split-lines input)))
+
+(defn fuel2
   "Calculate the fuel for the given mass and the remaining fuel for that mass
   until no more fuel is required."
-  ([weight]
-   (calc-fuel-star2 0 weight))
+  ([weight] (fuel2 0 weight))
   ([rem weight]
    (if (zero? weight)
      rem
-     (let [fuel (calc-fuel weight)]
-       (recur (+ rem fuel) fuel)))))
+     (let [n (fuel weight)]
+       (recur (+ rem n) n)))))
+
+; 1st star
+(solve fuel (utils/input->str "2019/day1.txt"))
+
+; 2nd star
+(solve fuel2 (utils/input->str "2019/day1.txt"))
