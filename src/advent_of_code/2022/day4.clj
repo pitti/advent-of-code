@@ -17,20 +17,22 @@
    (<= a y)))
 
 (defn str->vec [s]
-  (->>
-   (str/split s #"-")
-   (map read-string)
-   (into [])))
+  (into []
+        (map read-string)
+        (str/split s #"-")))
 
 (defn str-contains? [f [a b]]
   (f (str->vec a) (str->vec b)))
 
 (defn compute [f input]
-  (count
-   (->> input
-        (map #(str/split % #","))
-        (map #(str-contains? f %))
-        (filter identity))))
+  (transduce
+   (comp
+    (map #(str/split % #","))
+    (map #(str-contains? f %))
+    (filter identity)
+    (map (constantly 1)))
+   +
+   input))
 
 ; 1st star
 (compute fully-overlaps? (utils/input->lines "2022/day4.txt"))
