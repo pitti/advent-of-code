@@ -22,18 +22,20 @@
   (assoc m key
          (+ x (get m key 0))))
 
-(defn input->lines
-  [fname]
-  (->> fname
-       io/resource
-       slurp
-       str/split-lines))
-
 (defn input->str
   [fname]
-  (->> fname
-       io/resource
-       slurp))
+  (memoize
+   (->> fname
+        io/resource
+        slurp)))
+
+(defn input->lines
+  [fname]
+  (memoize
+   (->> fname
+        io/resource
+        slurp
+        str/split-lines)))
 
 (defn digits->list
   "convert a string \"ABCD... to a list with single-digit numbers (A B C D ...)"
