@@ -1,30 +1,25 @@
 (ns advent-of-code.2025.day3
-  (:require [advent-of-code.utils :as utils]
-            [clojure.string :as str]))
+  (:require [advent-of-code.utils :as utils]))
 
-(def testinput
-  "987654321111111
-811111111111119
-234234234234278
-818181911112111")
+(defn pick-jolts [[jolts r] xs]
+  (let [subs (drop-last (dec r) xs)
+        [idx maxval] (apply max-key second (reverse (map-indexed vector subs)))]
+    (cond
+      (> r 1) (pick-jolts [(conj jolts maxval) (dec r)] (drop (inc idx) xs))
+      :else (conj jolts maxval))))
 
-(defn choose-pair
-  ([[a b] n]
-   (let [ab (+ (* 10 a) b)
-         bn (+ (* 10 b) n)
-         an (+ (* 10 a) n)]
-     (cond
-       (> bn ab) [b n]
-       (> an ab) [a n]
-       :else [a b]))))
+(defn pick-jolts-str [ls num]
+  (read-string
+   (reduce str
+           (pick-jolts [[] num] (utils/digits->list ls)))))
 
-(defn solve [ls]
-  (->> (map utils/digits->list ls)
-       (map #(reduce choose-pair [0 0] %))
-       (map (fn [[a b]] (+ (* 10 a) b)))
-       (reduce +)))
+(defn solve [input len]
+  (reduce +
+          (map
+           #(pick-jolts-str % len)
+           input)))
 
-(solve (str/split-lines testinput))
+(solve (utils/input->lines "2025/day3.txt") 2) ; 1st star
 
-(solve (utils/input->lines "2025/day3.txt")) ; 1st star
+(solve (utils/input->lines "2025/day3.txt") 12) ; 2nd star
 
